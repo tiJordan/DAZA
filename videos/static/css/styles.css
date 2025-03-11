@@ -1,0 +1,52 @@
+/* Estilo para o botão de exclusão */
+.delete-video-btn {
+  background-color: #dc3545; /* Vermelho */
+  border-color: #dc3545;
+  color: white; /* Texto branco */
+  padding: 5px 10px; /* Espaçamento interno */
+  border-radius: 5px; /* Bordas arredondadas */
+  cursor: pointer; /* Cursor de ponteiro */
+  transition: background-color 0.3s ease; /* Transição suave */
+}
+
+.delete-video-btn:hover {
+  background-color: #c82333; /* Vermelho mais escuro */
+  border-color: #bd2130;
+}
+
+/* Estilo para o botão de edição */
+.edit-video-btn {
+  background-color: #ffc107; /* Amarelo */
+  border-color: #ffc107;
+  color: black; /* Texto preto */
+  padding: 5px 10px; /* Espaçamento interno */
+  border-radius: 5px; /* Bordas arredondadas */
+  cursor: pointer; /* Cursor de ponteiro */
+  transition: background-color 0.3s ease; /* Transição suave */
+}
+
+.edit-video-btn:hover {
+  background-color: #e0a800; /* Amarelo mais escuro */
+  border-color: #d39e00;
+}
+
+/* Estilo para os botões de ação */
+.d-flex.gap-2 {
+  gap: 10px; /* Espaçamento entre os botões */
+}
+
+/* Estilo para o formulário de edição */
+.edit-title-form {
+  margin-top: 10px; /* Espaçamento acima do formulário */
+}
+
+/* Estilo para o botão de salvar */
+.btn-success {
+  background-color: #28a745; /* Verde */
+  border-color: #28a745;
+}
+
+.btn-success:hover {
+  background-color: #218838; /* Verde mais escuro */
+  border-color: #1e7e34;
+}

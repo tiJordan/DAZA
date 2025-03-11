@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+
+{% block title %}Detalhes do Jogo{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="my-4">Jogo contra {{ match.opponent }}</h2>
+    
+    <!-- Resumo do Jogo -->
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">
+                {{ match.date }} - {{ match.location }}
+                <span class="badge bg-secondary float-end">{{ match.result if match.result else "Aguardando resultado" }}</span>
+            </h4>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Estatísticas do Jogo</h5>
+                    <ul class="list-group">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Gols Pró
+                            <span class="badge bg-success">{{ match.goals_for }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Gols Contra
+                            <span class="badge bg-danger">{{ match.goals_against }}</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Eventos do Jogo -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h4 class="mb-0">Linha do Tempo do Jogo</h4>
+        </div>
+        <div class="card-body">
+            <div class="timeline">
+                {% for detail in details|sort(attribute='minute') %}
+                <div class="timeline-item {% if detail.event_type == 'Gol' %}bg-success{% elif detail.event_type == 'Cartão Amarelo' %}bg-warning{% elif detail.event_type == 'Cartão Vermelho' %}bg-danger{% else %}bg-info{% endif %}">
+                    <div class="timeline-content">
+                        <span class="badge">{{ detail.minute }}'</span>
+                        <h5>{{ detail.player.name }}</h5>
+                        <p class="mb-0">
+                            {{ detail.event_type }}
+                            {% if detail.notes %}<br><small>{{ detail.notes }}</small>{% endif %}
+                        </p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Formulário para adicionar eventos -->
+    <div class="card">
+        <div class="card-header">
+            <h4 class="mb-0">Adicionar Evento</h4>
+        </div>
+        <div class="card-body">
+            <form action="/add_match_detail/" method="post">
+                <input type="hidden" name="match_id" value="{{ match.id }}">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Jogador</label>
+                        <select class="form-select" name="player_id" required>
+                            {% for player in players %}
+                            <option value="{{ player.id }}">{{ player.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Evento</label>
+                        <select class="form-select" name="event_type" required>
+                            <option value="Gol">Gol</option>
+                            <option value="Assistência">Assistência</option>
+                            <option value="Cartão Amarelo">Cartão Amarelo</option>
+                            <option value="Cartão Vermelho">Cartão Vermelho</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Minuto</label>
+                        <input type="number" class="form-control" name="minute" required>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Observações</label>
+                        <input type="text" class="form-control" name="notes">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary mt-3">Adicionar Evento</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    .timeline {
+        border-left: 3px solid #dee2e6;
+        position: relative;
+        padding-left: 30px;
+    }
+    .timeline-item {
+        position: relative;
+        margin-bottom: 20px;
+        padding: 15px;
+        border-radius: 5px;
+        color: white;
+    }
+    .timeline-item:before {
+        content: '';
+        position: absolute;
+        left: -38px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #dee2e6;
+    }
+    .timeline-content {
+        position: relative;
+    }
+</style>
+{% endblock %}

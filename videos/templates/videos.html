@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% block title %}Vídeos dos Jogos{% endblock %}
+{% block content %}
+<!-- Exibir mensagens flash -->
+{% if request.cookies.get("flash_message") %}
+  <div class="alert alert-{{ request.cookies.get('flash_category', 'success') }} alert-dismissible fade show" role="alert">
+    {{ request.cookies.get("flash_message") }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+{% endif %}
+
+<h1>Upload de Vídeos</h1>
+
+<!-- Restante do código do template -->
+
+<!-- Formulário de envio -->
+<div class="card mb-4">
+  <div class="card-header">Enviar um novo vídeo</div>
+  <div class="card-body">
+    <form action="/upload_video/" method="post" enctype="multipart/form-data">
+      <div class="mb-3">
+        <label for="file" class="form-label">Escolha um arquivo:</label>
+        <input type="file" class="form-control" id="file" name="file" accept="video/*" required>
+      </div>
+      <div class="mb-3">
+        <label for="title" class="form-label">Título do Vídeo:</label>
+        <input type="text" class="form-control" id="title" name="title" required>
+      </div>
+      <button type="submit" class="btn btn-primary">Enviar Vídeo</button>
+    </form>
+  </div>
+</div>
+
+<!-- Listagem dos vídeos -->
+<div class="row">
+  {% for video in videos %}
+  <div class="col-md-4 mb-4">
+    <div class="card">
+      <video class="card-img-top" controls>
+        <source src="/videos/{{ video.filename }}" type="video/mp4">
+        Seu navegador não suporta vídeos.
+      </video>
+     <div class="card-body">
+  <h5 class="card-title">{{ video.title }}</h5>
+
+  <!-- Botões de ação -->
+  <div class="d-flex gap-2 mb-3">
+    <!-- Botão Excluir -->
+    <form action="/delete_video/{{ video.id }}" method="post" class="d-inline">
+      <button type="submit" class="btn btn-danger">Excluir</button>
+    </form>
+
+    <!-- Botão Editar Título -->
+    <button type="button" class="btn btn-warning edit-title-btn" data-video-id="{{ video.id }}">
+      Editar Título
+    </button>
+  </div>
+
+  <!-- Campo de edição (inicialmente oculto) -->
+  <form action="/edit_video/{{ video.id }}" method="post" class="edit-title-form mb-3" style="display: none;" data-video-id="{{ video.id }}">
+    <div class="input-group">
+      <input type="text" class="form-control video-title-input" name="new_title" value="{{ video.title }}" required>
+      <button type="submit" class="btn btn-success">Salvar</button>
+    </div>
+  </form>
+</div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+<script>
+  // Adiciona um evento de clique aos botões "Editar Título"
+  document.querySelectorAll('.edit-title-btn').forEach(button => {
+    button.addEventListener('click', () => {
+      const videoId = button.getAttribute('data-video-id');
+      const editForm = document.querySelector(`.edit-title-form[data-video-id="${videoId}"]`);
+
+      // Alterna a visibilidade do formulário de edição
+      if (editForm.style.display === 'none') {
+        editForm.style.display = 'block';
+      } else {
+        editForm.style.display = 'none';
+      }
+    });
+  });
+</script>
+
+<script>
+  // Referenciar botões de exclusão
+  const deleteButtons = document.querySelectorAll('.delete-video-btn');
+  deleteButtons.forEach(button => {
+    button.addEventListener('click', (event) => {
+      const videoId = button.getAttribute('data-video-id');
+      const confirmDelete = confirm(`Tem certeza que deseja excluir o vídeo ${videoId}?`);
+      if (!confirmDelete) {
+        event.preventDefault(); // Cancela a exclusão se o usuário não confirmar
+      }
+    });
+  });
+
+  // Referenciar botões de edição
+  const editButtons = document.querySelectorAll('.edit-video-btn');
+  editButtons.forEach(button => {
+    button.addEventListener('click', (event) => {
+      const videoId = button.getAttribute('data-video-id');
+      const input = button.closest('.input-group').querySelector('.video-name-input');
+      const newName = input.value.trim();
+
+      if (!newName) {
+        alert('O nome do vídeo não pode estar vazio!');
+        event.preventDefault(); // Cancela a edição se o nome estiver vazio
+      }
+    });
+  });
+</script>
+<script>
+  // Fechar o alerta após 5 segundos
+  setTimeout(() => {
+    const alert = document.querySelector('.alert');
+    if (alert) {
+      alert.remove();
+      // Limpar os cookies de flash
+      document.cookie = "flash_message=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      document.cookie = "flash_category=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    }
+  }, 5000);
+</script>
+{% endblock %}

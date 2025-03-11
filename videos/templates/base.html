@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Estatísticas do Time{% endblock %}</title>
+  
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <!-- Link para o arquivo CSS personalizado -->
+  <link href="{{ url_for('static', path='css/styles.css') }}" rel="stylesheet">
+  
+  <style>
+    body {
+      background-image: url('/static/background.jpg'); /* Imagem de fundo */
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .navbar {
+      background: rgba(0, 0, 0, 0.85) !important; /* Torna o menu visível */
+    }
+    .container {
+      flex: 1; /* Faz com que o conteúdo ocupe a parte central */
+    }
+    .content-container {
+      background: rgba(0, 0, 0, 0.8); /* Fundo escuro semi-transparente */
+      padding: 20px;
+      border-radius: 10px;
+    }
+    footer {
+      text-align: center;
+      padding: 15px;
+      background: rgba(0, 0, 0, 0.9);
+      color: white;
+      width: 100%;
+      position: relative;
+    }
+  </style>
+</head>
+</html>
+<body>
+  <!-- Barra de navegação fixa no topo -->
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="/">Estatísticas do Time</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive"
+         aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+         <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+         <ul class="navbar-nav ms-auto">
+           <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+           <li class="nav-item"><a class="nav-link" href="/players">Jogadores</a></li>
+           <li class="nav-item"><a class="nav-link" href="/stats">Estatísticas</a></li>
+           <li class="nav-item"><a class="nav-link" href="/videos">Vídeos</a></li>
+           <li class="nav-item"><a class="nav-link" href="/calendar">Calendário</a></li>
+         </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container mt-5 content-container">
+    {% block content %}{% endblock %}
+  </div>
+
+  <footer>
+    <p>Siga o time no Instagram: 
+      <a href="https://www.instagram.com/dazantiga_fc/" target="_blank" style="color: #FFD700; text-decoration: none;">
+        @dazantiga_fc
+      </a>
+    </p>
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

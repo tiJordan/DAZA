@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Estatísticas{% endblock %}
+{% block content %}
+<h1>Estatísticas dos Jogadores</h1>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Jogador</th>
+      <th>Gols</th>
+      <th>Assistências</th>
+      <th>Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for stat in stats %}
+      <tr>
+        <td>{{ stat.player.name }}</td>
+        <td>{{ stat.goals }}</td>
+        <td>{{ stat.assists }}</td>
+        <td>
+          <form action="/delete_stats/{{ stat.id }}" method="post" style="display:inline;">
+            <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
+          </form>
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

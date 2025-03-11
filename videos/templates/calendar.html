@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}Calendário de Jogos{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="my-4">Calendário de Jogos</h1>
+    
+    <!-- Formulário para adicionar jogo -->
+    <div class="card mb-4">
+        <div class="card-header">Adicionar Novo Jogo</div>
+        <div class="card-body">
+            <form action="/add_match/" method="post">
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <label class="form-label">Data</label>
+                        <input type="date" class="form-control" name="date" required>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Adversário</label>
+                        <input type="text" class="form-control" name="opponent" required>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Local</label>
+                        <select class="form-select" name="location" required>
+                            <option value="Casa">Casa</option>
+                            <option value="Fora">Fora</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Resultado</label>
+                        <input type="text" class="form-control" name="result" placeholder="Ex: 2x1">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary mt-3">Adicionar Jogo</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Lista de Jogos -->
+    <div class="list-group">
+        {% for match in matches %}
+        <a href="/match/{{ match.id }}" class="list-group-item list-group-item-action">
+            <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">{{ match.opponent }}</h5>
+                <small>{{ match.date }}</small>
+            </div>
+            <p class="mb-1">
+                <span class="badge bg-primary">{{ match.location }}</span>
+                {% if match.result %}
+                <span class="badge bg-success ms-2">{{ match.result }}</span>
+                {% endif %}
+            </p>
+        </a>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

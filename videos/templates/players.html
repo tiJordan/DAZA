@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Jogadores{% endblock %}
+{% block content %}
+<h1>Lista de Jogadores</h1>
+<ul class="list-group">
+  {% for player in players %}
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+      <span>
+        <strong>Nome:</strong> {{ player.name }} - <strong>Posição:</strong> {{ player.position }}
+      </span>
+      <form action="/delete_player/{{ player.id }}" method="post" style="display:inline;">
+        <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
+      </form>
+    </li>
+  {% endfor %}
+</ul>
+{% endblock %}
